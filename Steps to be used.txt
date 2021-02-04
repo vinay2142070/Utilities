@@ -1,0 +1,16 @@
+To Encrypt:
+java -jar Encryption.jar
+Enter the partner Id: A1899565 //Enter the partner Id to be used
+Enter the Request/Response file path: E:\Request.txt //Path of file having the raw request body
+Encryption or Decryption , input either E or D: E
+Enter the publicKey file path: E:\PublicKey.txt  //Path of file having the partner public key
+Enter the output path: E:\EncReq.txt  //Path where you want the file with encrypted request and header details
+
+To Decrypt:
+java -jar Encryption.jar
+Enter the partner Id: A1899565 //Enter the partner Id to be used  
+Enter the Request/Response file path: E:\Response.txt //Path of file having the encrypted response body
+Encryption or Decryption , input either E or D: D
+Enter the api-id : UZZ2c6swlu3cpqou5M1Es89jzL4g3tTu2CrS1/FUrkassHonzO/aj7sVDWXuJWohRls34zpIBrywsSQ9LhEgtzqfpYlAOWQkzN4QxkbZ1kIilPVNgt/IClOMVqDcMQA+ZQGiDUEaRnyYEwBBAzxcoyjjGin/tPc8MFVKHLr7eQcg5OxuO2CRDldF9Bz2Ogs6WiHV0yunThI/KwCYJbNeqEE05NErNOvIjHxvit3bQffDoDvNnAgu6cEb5WYCrmb1WaN58H6AvRaruK0zje2qrLgISwc1InDBjuadZM6JwvpMxOv+VN0jlB6Ep62nBblqZXcTV0kdkznx56u2mrp0XA== //api-key in the response header
+Enter the privateKey file path:  E:\PrivateKey.txt  //Path of file having the partner private key 
+Enter the output path: E:\DecRes.txt  //Path where you want the file with decrypted response
