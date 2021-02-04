@@ -1,0 +1,22 @@
+ checklist for new apps:
+1.Singleton DB if SQLite is used
+2.SQLCipher
+3.Storing encrypted apikeys using keystore or store in NDK files.
+4.Root checks
+5.cleartexttraffic false
+6.Filesprovider if target is more than 23
+7.Retrofit
+8.Image compression using compressor code or GLIDE
+9.SSL Pinning
+10.USBDebugging to for release builds
+11.allowbackup false to protect DB
+12.prevent recompiled apk from running.add hash checker if any file or content is altered
+13.Code obfuscation
+14.min sdk should be 19 and more
+15.Sha256 should be used instead of md5 anywhere in code for hashing
+16.exceptions should not be revealed instead configure some codes.
+17.Request and response has to be made tamper proof.
+18.Components exported should be false.
+19.Specify required permissions in androidmanifest if it is really required.else check for runtime temporary permission
+20.Encrypting requests and responses.
+21.Disable copy-paste for Edittext.
