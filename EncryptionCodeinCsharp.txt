@@ -1,0 +1,33 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace test1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+			
+           var publicKey =
+                       "<RSAKeyValue><Modulus>geIu2QbK8GZqdSxFLO+7mKSJw63hXZnTJMEUnwLxRI+isrQF4aTVmK26M08fb+GaiONUhb35XRQO8TnZGhdm17BMQB6K/thcSSrKUc/QRoT98+QhsIFpc3zIWqNYXPVfbjwVKwdDjSEx2VPfd7xDu+QFDJR/faELcXJJ0LNBCW3Wr3siRy/meYm14MVCfDDhJdzl/98k4YWKdyTiCG11zNKeUMaoDO43Ssy4JwQPhy35nHK3ME4fhgKj0vT2KQqJPG+VBomL7p0aazpchIAKonq5Qr9iHbYlejf1qe4CimDPCwI93/rJZ1MUUIqHjgUdi3euBk65/fgPkHeKAyFQLw==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>";
+        var sbytes = Encoding.UTF8.GetBytes("ED025750+"+"cstest1");
+        var rsa = new RSACryptoServiceProvider(2048);
+        rsa.FromXmlString(publicKey);
+        var encdata = rsa.Encrypt(sbytes, false);
+       var enc = Convert.ToBase64String(encdata);
+            Console.WriteLine(enc);
+            Console.ReadKey();
+        }
+    }
+  
+
+    
+
+}
