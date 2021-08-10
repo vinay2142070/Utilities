@@ -1,0 +1,51 @@
+'''
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+'''
+import hashlib
+print ('Hello World')
+md5_hash = hashlib.md5()
+
+a_file = open("testmd.txt", "rb")
+content = a_file.read()
+md5_hash.update(content)
+
+digest = md5_hash.hexdigest()
+print(digest)
+
+
+--------------------------------------------------------------------
+/******************************************************************************
+
+                            Online C# Compiler.
+                Code, Compile, Run and Debug C# program online.
+Write your code in this editor and press "Run" button to execute it.
+
+*******************************************************************************/
+
+using System;
+using System.IO;
+using System.Security.Cryptography;
+class HelloWorld {
+  static void Main() {
+    Console.WriteLine(GetMD5HashFromFile(@"testmd.txt"));
+    
+
+    
+  }
+
+private static string GetMD5HashFromFile(string fileName)
+{
+	using (var md5 = MD5.Create())
+	{
+    	using (var stream = File.OpenRead(fileName))
+        {
+        	return BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", string.Empty);
+       	}
+	}
+}
+}
