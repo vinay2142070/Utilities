@@ -1,0 +1,63 @@
+1. Install Python 3.8
+Installing Python is much like installing any other program: go to their website, download the software, install it.
+
+Below this guide, we have an archived guide using homebrew and virtualenv for installation.
+
+1. Go to python.org/downloads/mac-osx
+
+2. Under Stable Releases look for: Python 3.8.X and replace X with the largest number you can find. Under that, click the link to download the macOS 64-bit installer
+
+3. After the installer downloads, open it, and install all the defaults.
+
+4. Verify Installation: - Open up Terminal in (Applications/Utilities/Terminal) - Verify the version from above by typing:
+
+```
+python3.8 -V
+```
+Does the result match the stable release you downloaded? Great. Continue.
+2. Install Pipenv Globally
+1. Open Terminal in (Applications/Utilities/Terminal) and upgrade pip:
+
+```
+python3.8 -m pip install pip --upgrade
+```
+Another option to upgade, is `pip3 install pip --upgrade`
+2. Install Pipenv:
+
+```
+python3.8 -m pip install pipenv
+```
+
+Another option to upgade, is `pip3 install pipenv --upgrade`
+3. Verify Pipenv:
+
+```
+pipenv
+```
+If you see `zsh: command not found: pipenv` then you did the wrong installation.
+3. Create Virtual Environment with Pipenv
+1. Open Terminal in (Applications/Utilities/Terminal)
+
+2. Make Dev directory:
+
+```
+mkdir Dev
+```
+You only have to do this 1 time
+3. Create an empty directory (aka folder) for your project inside ~/Dev folder:
+
+```
+mkdir ~/Dev/cfehome
+```
+4. Initialize the Virtual Environment:
+
+```
+cd ~/Dev/cfehome
+pipenv install --python 3.8
+```
+5. Activate the Virtual Environment:
+
+```
+pipenv shell
+```
+You can use the command `deactivate` to end your virtual environment.
