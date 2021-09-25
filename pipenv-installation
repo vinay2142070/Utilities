@@ -61,3 +61,38 @@ pipenv install --python 3.8
 pipenv shell
 ```
 You can use the command `deactivate` to end your virtual environment.
+
+
+4. Install Django & Create Django Project in your Virtual Environment
+1. Navigate to your project:
+
+```
+cd ~/Dev/cfehome
+pipenv install --python 3.8 # if not already done
+pipenv shell
+```
+Naturally, `~/Dev/cfehome`, is the path to the project we created above.
+2. Install Django To use the latest release of Django:
+
+```
+pipenv install Django
+```
+Or a specific release:
+```
+pipenv install Django===3.0.4
+```
+Replace `3.0.4` with `Z.Y.X` version numbers from [django](http://www.djangoproject.com/download)
+3. Create Django Project After Django is installed, the command is simply django-admin startproject <your-project-name> to create the default Django project.
+
+```
+cd ~/Dev/cfehome
+pipenv shell
+django-admin startproject cfehome .
+```
+Or
+
+```
+cd ~/Dev/cfehome
+pipenv run django-admin startproject cfehome .
+```
+Notice the `.` at the end of the command above. That means it will create your project within the `~/Dev/cfehome` directory.
