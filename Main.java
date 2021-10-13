@@ -1,3 +1,4 @@
+//java DES utility to encrypt and decrypt files.
 //Java classes that are mandatory to import for encryption and decryption process   
 import java.io.FileInputStream;  
 import java.io.FileOutputStream;  
