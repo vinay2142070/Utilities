@@ -1,0 +1,224 @@
+    private String payloadEcryption(String requestString,String RRN)
+    {
+        JSONObject jsonob=new JSONObject();
+
+        String apiCode="";
+
+
+
+        apiCode = Key7;
+
+
+
+
+        String ct="";
+        String sk="";
+        String jiv="";
+        String api="";
+        String ts="";
+
+        try {
+            KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+            keyGenerator.init(256);
+
+            // Generate Key
+            SecretKey key = keyGenerator.generateKey();
+
+            // Generating IV.
+            byte[] IV = new byte[16];
+            SecureRandom random = new SecureRandom();
+            random.nextBytes(IV);
+
+            AESKey = new SecretKeySpec(key.getEncoded(),"AES");
+
+            iv = new IvParameterSpec(IV);
+
+            cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+
+
+            cipher.init(Cipher.ENCRYPT_MODE, AESKey, iv);
+            byte[] plainTextBytes = requestString.getBytes();
+            byte[] cipherText = cipher.doFinal(plainTextBytes);
+
+
+
+            ct = Base64.encodeToString(cipherText,Base64.NO_WRAP);
+            sk = encryptUsingPublicKey(AESKey.getEncoded());
+            jiv = encryptUsingPublicKey(iv.getIV());
+
+
+
+
+            byte[] apiCodeTextBytes = apiCode.getBytes();
+            byte[] apicipherText = cipher.doFinal(apiCodeTextBytes);
+
+            api = Base64.encodeToString(apicipherText,Base64.NO_WRAP);
+
+            SimpleDateFormat transm_date_timeFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+            transm_date_timeFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+            String Transm_Date_time = transm_date_timeFormat.format(new Date());
+
+            ts = encryptUsingPublicKey(Transm_Date_time.getBytes());
+
+            try {
+                jsonob.accumulate("requestId",RRN);
+                //   jsonob.accumulate("requestId","20191212161801");
+
+                if(isAuth==1)
+                {
+
+
+                    jsonob.accumulate("service","MFI_BC");
+                }
+                else
+                {
+                    jsonob.accumulate("service",Key4);
+                }
+
+
+                jsonob.accumulate("ct",ct);
+                jsonob.accumulate("sk",sk);
+                jsonob.accumulate("iv",jiv);
+                jsonob.accumulate("api",api);
+                jsonob.accumulate("ts",ts);
+
+            } catch (JSONException e) {
+                if (Common.DEBUG_MODE)
+                    e.printStackTrace();
+            }
+
+
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException  | IllegalBlockSizeException | BadPaddingException e) {
+            if (Common.DEBUG_MODE)
+                e.printStackTrace();
+        }
+        catch(Exception e)
+        {
+            if(Common.DEBUG_MODE) e.printStackTrace();
+        }
+
+        return jsonob.toString();
+
+    }
+
+  /*  public  String encryptUsingPublicKey(byte[] req, Context context) {
+
+        byte[] ciphertextBytes = null;
+
+        try {
+            Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+
+            //Get Cipher Instance RSA With ECB Mode and OAEPWITHSHA-512ANDMGF1PADDING Padding
+            Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA1AndMGF1Padding", "BC");
+
+           // InputStream inStream = getAssets().open("equitasPublicKey.cer");
+            InputStream inStream = getAssets().open("public.key");
+            CertificateFactory cf = CertificateFactory.getInstance("X.509");
+            X509Certificate cert = (X509Certificate) cf.generateCertificate(inStream);
+            Log.e("Cert", cert.toString());
+            //inStream.close();
+
+            RSAPublicKey pubkey = (RSAPublicKey) cert.getPublicKey();
+
+            cipher.init(Cipher.ENCRYPT_MODE, pubkey);
+
+            ciphertextBytes = cipher.doFinal(req);
+
+            if(Common.DEBUG_MODE)
+                Log.d(Common.LOGTAG,"equitas ciphertext"+Base64.encodeToString(ciphertextBytes,Base64.NO_WRAP).replace("\r\n", ""));
+
+            return Base64.encodeToString(ciphertextBytes,Base64.NO_WRAP).replace("\r\n", "");
+
+        } catch (IOException e) {
+            System.out.println("IOException:" + e);
+            e.printStackTrace();
+        } catch (CertificateException e) {
+            System.out.println("CertificateException:" + e);
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            System.out.println("NoSuchAlgorithmException:" + e);
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("Exception:" + e);
+            e.printStackTrace();
+        }
+        return null;
+    }*/
+
+    private static PublicKey getPublicKeyFromPemFormat(String PEMString,
+                                                       boolean isFilePath) throws IOException, NoSuchAlgorithmException,
+            InvalidKeySpecException {
+
+        BufferedReader pemReader = null;
+        if (isFilePath) {
+            pemReader = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(PEMString)));
+        } else {
+            pemReader = new BufferedReader(new InputStreamReader(
+                    new ByteArrayInputStream(PEMString.getBytes("UTF-8"))));
+        }
+        StringBuffer content = new StringBuffer();
+        String line = null;
+        while ((line = pemReader.readLine()) != null) {
+            if (line.indexOf("-----BEGIN PUBLIC KEY-----") != -1) {
+                while ((line = pemReader.readLine()) != null) {
+                    if (line.indexOf("-----END PUBLIC KEY") != -1) {
+                        break;
+                    }
+                    content.append(line.trim());
+                }
+                break;
+            }
+        }
+        if (line == null) {
+
+
+            throw new IOException("PUBLIC KEY" + " not found");
+        }
+
+
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        return keyFactory.generatePublic(new X509EncodedKeySpec(Base64.decode(content.toString(), Base64.DEFAULT)));
+
+    }
+
+    public  String encryptUsingPublicKey(byte[] req) {
+
+        byte[] ciphertextBytes = null;
+
+        try {
+            Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+
+            //Get Cipher Instance RSA With ECB Mode and OAEPWITHSHA-512ANDMGF1PADDING Padding
+            Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA1AndMGF1Padding", "BC");
+
+            // InputStream inStream = getAssets().open("equitasPublicKey.cer");
+
+            //inStream.close();
+
+            String publicKey=new String(Base64.decode(Key6,Base64.DEFAULT));
+
+            RSAPublicKey pubkey = (RSAPublicKey)getPublicKeyFromPemFormat(publicKey,false);//(RSAPublicKey) keyFactory.generatePublic(pubKeySpec);
+
+
+            cipher.init(Cipher.ENCRYPT_MODE, pubkey);
+
+            ciphertextBytes = cipher.doFinal(req);
+
+
+
+
+            return Base64.encodeToString(ciphertextBytes,Base64.NO_WRAP);
+
+        }  catch (NoSuchAlgorithmException e) {
+            System.out.println("NoSuchAlgorithmException:" + e);
+            if (Common.DEBUG_MODE)
+                e.printStackTrace();
+        } catch (Exception e) {
+            if (Common.DEBUG_MODE)
+                System.out.println("Exception:" + e);
+            if (Common.DEBUG_MODE)
+                e.printStackTrace();
+        }
+        return null;
+    }
